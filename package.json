@@ -1,6 +1,6 @@
 {
   "name": "events-to-winston",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Observing an EventEmitter, logging to winston",
   "main": "index.js",
   "files": [

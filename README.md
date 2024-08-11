@@ -133,15 +133,15 @@ Instead of direct injection, classes using this `events-to-winston`'s feature sh
 
 ```js
 class MyService {
-  get [Tracker.LOGGING_ID] {
+  get [Tracker.LOGGING_ID] () {
     return this.name
   }
 }
 class MyServiceRequest {
-  get [Tracker.LOGGING_PARENT] {
+  get [Tracker.LOGGING_PARENT] () {
     return this.service
   }
-  get [Tracker.LOGGING_ID] {
+  get [Tracker.LOGGING_ID] () {
     return this.uuid
   }
 }

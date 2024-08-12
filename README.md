@@ -62,7 +62,7 @@ This is the only mandatory property in the `event`'s configuration. If set as a 
 By default, is copied from the event name. Otherwise, is copied as is or evaluated as a function, like `level`.
 
 ## `details`
-If configured, must be a function, called the same way as for `level` and `message`. Its result, set as `info.details` is presumed to be an object to be used with advanced formatters.
+If configured, must be a plain [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) or a function returning plain objects — the latter is called the same way as for `level` and `message`.
 
 ## `id`
 If set, this global tracker option is copied into each info object. It's presumed to be some unique ID of the event emitter being observed.
@@ -144,5 +144,30 @@ class MyServiceRequest {
   get [Tracker.LOGGING_ID] () {
     return this.uuid
   }
+}
+```
+
+# `details` declaration
+Along with `info.id`, `info.details` is another [_meta_](https://github.com/winstonjs/winston?tab=readme-ov-file#streams-objectmode-and-info-objects) property that may be used to represent some `emitter` internals to be used in advanced formatters. Think query parameters for HTTP requests or parameter sets for SQL statement calls. And, as for the `id` field, emitters can publish the special property which content will appear in `info.details`:
+
+```js
+get [Tracker.LOGGING_DETAILS] () {
+  return {
+    const {parameters} = this
+    return {...super [Tracker.LOGGING_DETAILS], parameters}
+  }
+}
+```
+Note that `info.details` is set only for events with the `details` option configured, at least as an empty object:
+```js
+events: {
+  start: {
+    level: 'info',
+    details: {},   // emitter[Tracker.LOGGING_DETAILS] will be merged
+  },
+  finish: {
+    level: 'info',
+    elapsed: true, // here, no details at all
+  },
 }
 ```

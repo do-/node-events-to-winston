@@ -31,7 +31,8 @@ class MySubClass extends MyClass {
 	get [Tracker.LOGGING_DETAILS] () {
 		return {
 			...super [Tracker.LOGGING_DETAILS],
-			flag: 'A'
+			flag: 'A',
+			label: 5,
 		}
 	}
 
@@ -54,7 +55,7 @@ test ('details', () => {
 //			new transports.Console (),
 			new transports.Stream ({stream}),
 		],
-		format: format.printf (({message, details}) => `${details.flag}${message}${details.id}`)
+		format: format.printf (({message, details}) => `${details.flag}${message}${JSON.stringify(details)}`)
 	})
 	
 	const emitter = new MySubClass ({
@@ -67,7 +68,7 @@ test ('details', () => {
 			progress: {
 				level: 'info',
 				message: v => v,
-				details: {}
+				details: {label: undefined}
 			},
 		}
 	})
@@ -76,6 +77,6 @@ test ('details', () => {
 
 	emitter.emit ('progress', 50)
 
-	expect (s.trim ()).toBe ('A501')
+	expect (s.trim ()).toBe ('A50{\"id\":1,\"flag\":\"A\"}')
 
 })

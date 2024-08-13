@@ -163,11 +163,18 @@ Note that `info.details` is set only for events with the `details` option config
 events: {
   start: {
     level: 'info',
-    details: {},   // emitter[Tracker.LOGGING_DETAILS] will be merged
+    details: {}              // emitter[Tracker.LOGGING_DETAILS] will be used 1st in Object.assign()...
+  },
+  notice: {
+    level: 'info',
+    details: ({where}) => ({               
+      where,
+      parameters: undefined, // ...and may be overridden as needed
+    }),   
   },
   finish: {
     level: 'info',
-    elapsed: true, // here, no details at all
+    elapsed: true,           // here, no details at all
   },
 }
 ```

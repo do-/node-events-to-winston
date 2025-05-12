@@ -1,6 +1,6 @@
 const {createLogger, format, transports, level, stream} = require ('winston')
 const EventEmitter = require ('events')
-const {Tracker} = require ('..')
+const {Tracker, formatElapsed} = require ('..')
 const {Writable} = require ('stream')
 
 class MyClass extends EventEmitter {
@@ -110,10 +110,18 @@ test ('basic', () => {
 
 	const logger = createLogger ({
 		transports: [
-//			new transports.Console (),
+			// new transports.Console ({
+			// 	format: format.combine (
+			// 		formatElapsed ({_format: '%i'}),
+			// 		format.json ()
+			// 	)
+			// }),
 			new transports.Stream ({stream}),
 		],
-		format: format.printf (({level, id, message, details, elapsed}) => `${level} ${id} ${message}${details??''} ${elapsed??''}`)
+		format: format.combine (
+			formatElapsed ({_format: '%i'}),
+			format.printf (({level, id, message, details, elapsed}) => `${level} ${id} ${message}${details??''}`)
+		)
 	})
 	
 	const emitter = new MyClass ({
@@ -130,7 +138,7 @@ test ('basic', () => {
 			},
 			finish: {
 				level: 'info',
-				message: '<',
+//				message: '<',
 				elapsed: true,
 			},
 		}
@@ -152,7 +160,7 @@ test ('basic', () => {
 	expect (a).toHaveLength (3)
 	expect (a [0]).toBe ('info root/1 >1a')
 	expect (a [1]).toBe ('info root/1 50%')
-	expect (a [2].slice (0, 13)).toBe ('info root/1 <')
-	expect (parseInt (a [2].slice (13)) >= 0).toBe (true)
+	expect (a [2].slice (0, 11)).toBe ('info root/1')
+	expect (parseInt (a [2].slice (11, -2).trim ()) >= 0).toBe (true)
 
 })

@@ -57,7 +57,7 @@ test ('details', () => {
 		],
 		format: format.printf (({message, details}) => `${details.flag}${message}${JSON.stringify(details)}`)
 	})
-	
+
 	const emitter = new MySubClass ({
 		id: 1,
 		parent: new MyClass ({id: 'root'})

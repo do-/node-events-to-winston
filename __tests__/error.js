@@ -29,19 +29,31 @@ test ('rewrite', async () => {
 	let s = ''
 
 	const logger = createLogger ({
-		transports: [new transports.Stream ({stream: new Writable ({write (r) {s += r.toString ()}})})],
-		format: format.printf (({level, message}) => `${level} ${message}`)
+		transports: [
+
+			// new transports.Console ({
+			// 	format: format.combine (
+			// 		// formatElapsed ({_format: '%i'}),
+			// 		format.json ()
+			// 	)
+			// }),
+
+			new transports.Stream ({stream: new Writable ({write (r) {s += r.toString ()}})})
+		],
+		format: format.printf (({level, message, isLast}) => `${level} ${isLast}${message}`)
 	})
 	
 	const emitter = new EventEmitter ()
 	const tracker = new Tracker (emitter, logger, {events: {
-		error: {level: 'info'}
+		error: {level: 'info', isLast: true},
+		finish: {level: 'info', elapsed: true}
 	}})
 
 	tracker.listen ()
 
 	emitter.emit ('error', Error ('TEST'))
+	emitter.emit ('finish')
 
-	expect (s.split ('\n') [0].trim ()).toBe ('info Error: TEST')
+	expect (s.split ('\n') [0].trim ()).toBe ('info trueError: TEST')
 
 })

@@ -68,6 +68,8 @@ test ('details', () => {
 			progress: {
 				level: 'info',
 				message: v => v,
+				elapsed: true,
+				isLast: false,
 				details: {label: undefined}
 			},
 		}

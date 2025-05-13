@@ -120,7 +120,7 @@ test ('basic', () => {
 		],
 		format: format.combine (
 			formatElapsed ({_format: '%i'}),
-			format.printf (({level, id, message, details, isFirst}) => `${level} ${id} ${isFirst ? '>' : message}${details??''}`)
+			format.printf (({level, id, message, details, isFirst, isLast}) => `${level} ${id} ${isLast ? '< ' : ''}${isFirst ? '>' : message}${details??''}`)
 		)
 	})
 	
@@ -159,7 +159,7 @@ test ('basic', () => {
 	expect (a).toHaveLength (3)
 	expect (a [0]).toBe ('info root/1 >1a')
 	expect (a [1]).toBe ('info root/1 50%')
-	expect (a [2].slice (0, 11)).toBe ('info root/1')
-	expect (parseInt (a [2].slice (11, -2).trim ()) >= 0).toBe (true)
+	expect (a [2].slice (0, 13)).toBe ('info root/1 <')
+	expect (parseInt (a [2].slice (13, -2).trim ()) >= 0).toBe (true)
 
 })

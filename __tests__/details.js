@@ -1,6 +1,6 @@
 const {createLogger, format, transports, level, stream} = require ('winston')
 const EventEmitter = require ('events')
-const {Tracker} = require ('..')
+const {Tracker, formatDetails} = require ('..')
 const {Writable} = require ('stream')
 
 class MyClass extends EventEmitter {
@@ -55,7 +55,12 @@ test ('details', () => {
 //			new transports.Console (),
 			new transports.Stream ({stream}),
 		],
-		format: format.printf (({message, details}) => `${details.flag}${message}${JSON.stringify(details)}`)
+
+		format: format.combine (
+			formatDetails (),
+			format.printf (({message, details}) => `${details.flag}${message}`)
+		)
+		
 	})
 
 	const emitter = new MySubClass ({
@@ -79,6 +84,6 @@ test ('details', () => {
 
 	emitter.emit ('progress', 50)
 
-	expect (s.trim ()).toBe ('A50{\"id\":1,\"flag\":\"A\"}')
+	expect (s.trim ()).toBe ('A50 {\"flag\":\"A\",\"id\":1}')
 
 })

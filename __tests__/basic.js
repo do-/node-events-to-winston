@@ -112,7 +112,7 @@ test ('basic', () => {
 		transports: [
 			// new transports.Console ({
 			// 	format: format.combine (
-			// 		formatElapsed ({_format: '%i'}),
+			// 		// formatElapsed ({_format: '%i'}),
 			// 		format.json ()
 			// 	)
 			// }),
@@ -120,7 +120,7 @@ test ('basic', () => {
 		],
 		format: format.combine (
 			formatElapsed ({_format: '%i'}),
-			format.printf (({level, id, message, details, elapsed}) => `${level} ${id} ${message}${details??''}`)
+			format.printf (({level, id, message, details, isFirst}) => `${level} ${id} ${isFirst ? '>' : message}${details??''}`)
 		)
 	})
 	
@@ -138,7 +138,6 @@ test ('basic', () => {
 			},
 			finish: {
 				level: 'info',
-//				message: '<',
 				elapsed: true,
 			},
 		}

@@ -12,10 +12,11 @@ test ('basic', async () => {
 	expect (formatDetails ({replacer: null}).transform ({message: '<', details: {id: 1, login: 'a', password: '1'}}).message).toBe ('< {"id":1,"login":"a","password":"1"}')
 	expect (formatDetails ({maxLength: 3, replacer: null}).transform ({message: '<', details: {id: 1, code: 'RED', label: 'Loooong'}}).message).toBe ('< {"code":"RED","id":1,"label":"Loo..."}')
 	expect (formatDetails ({maxLength: 3, ellipsis: '…', replacer: (_, v) => typeof v === 'number' ? String (v) : v}).transform ({message: '<', details: {id: 1, code: 'RED', label: 'Loooong'}}).message).toBe ('< {"code":"RED","id":"1","label":"Loo…"}')
+	expect (formatDetails ({maxLength: Infinity}).transform ({message: '<', details: {label: 'Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong'}}).message).toBe ('< {"label":"Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong"}')
 
 	expect (() => formatDetails ({maxLength: -1})).toThrow ('maxLength')
 	expect (() => formatDetails ({maxLength: 0})).toThrow ('maxLength')
-	expect (() => formatDetails ({maxLength: Infinity})).toThrow ('maxLength')
+	expect (() => formatDetails ({maxLength: 3.14})).toThrow ('maxLength')
 	expect (() => formatDetails ({maxLength: '20'})).toThrow ('maxLength')
 
 })

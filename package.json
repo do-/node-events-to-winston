@@ -43,10 +43,8 @@
   },
   "homepage": "https://github.com/do-/node-events-to-winston#readme",
   "peerDependencies": {
-    "winston": "^3.14.0"
-  },
-  "dependencies": {
-    "subclassable-object-merger": "^1.0.1"
+    "subclassable-object-merger": "^1.0.1",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "jest": "^29.7.0"

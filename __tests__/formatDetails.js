@@ -13,10 +13,14 @@ test ('basic', async () => {
 	expect (formatDetails ({maxLength: 3, replacer: null}).transform ({message: '<', details: {id: 1, code: 'RED', label: 'Loooong'}}).message).toBe ('< {"code":"RED","id":1,"label":"Loo..."}')
 	expect (formatDetails ({maxLength: 3, ellipsis: '…', replacer: (_, v) => typeof v === 'number' ? String (v) : v}).transform ({message: '<', details: {id: 1, code: 'RED', label: 'Loooong'}}).message).toBe ('< {"code":"RED","id":"1","label":"Loo…"}')
 	expect (formatDetails ({maxLength: Infinity}).transform ({message: '<', details: {label: 'Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong'}}).message).toBe ('< {"label":"Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong"}')
+	expect (formatDetails ().transform ({message: '<', details: {buf: Buffer.from ([33, 33, 33, 33, 33, 33])}}).message).toBe ('< {\"buf\":\"ISEhISEh\"}')
+	expect (formatDetails ({encoding: 'hex'}).transform ({message: '<', details: {buf: Buffer.from ([33, 33, 33, 33, 33, 33])}}).message).toBe ('< {\"buf\":\"212121212121\"}')
+	expect (formatDetails ({encoding: _ => undefined}).transform ({message: '<', details: {buf: Buffer.from ([33, 33, 33, 33, 33, 33])}}).message).toBe ('< {}')
 
 	expect (() => formatDetails ({maxLength: -1})).toThrow ('maxLength')
 	expect (() => formatDetails ({maxLength: 0})).toThrow ('maxLength')
 	expect (() => formatDetails ({maxLength: 3.14})).toThrow ('maxLength')
 	expect (() => formatDetails ({maxLength: '20'})).toThrow ('maxLength')
+	expect (() => formatDetails ({encoding: 'hexen'})).toThrow ('encoding')
 
 })

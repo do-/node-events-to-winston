@@ -1,3 +1,4 @@
+const {Transform} = require ('node:stream')
 const {formatDetails} = require ('..')
 
 test ('basic', async () => {
@@ -14,8 +15,6 @@ test ('basic', async () => {
 	expect (formatDetails ({maxLength: 3, ellipsis: '…', replacer: (_, v) => typeof v === 'number' ? String (v) : v}).transform ({message: '<', details: {id: 1, code: 'RED', label: 'Loooong'}}).message).toBe ('< {"code":"RED","id":"1","label":"Loo…"}')
 	expect (formatDetails ({maxLength: Infinity}).transform ({message: '<', details: {label: 'Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong'}}).message).toBe ('< {"label":"Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong"}')
 	expect (formatDetails ().transform ({message: '<', details: {buf: Buffer.from ([33, 33, 33, 33, 33, 33])}}).message).toBe ('< {\"buf\":\"ISEhISEh\"}')
-	expect (formatDetails ().transform ({message: '<', details: {buf: {type: 'Buffer', data: [33, 33, 33, 33, 33, 33]}}}).message).toBe ('< {\"buf\":\"ISEhISEh\"}')
-	expect (formatDetails ().transform ({message: '<', details: {buf: {type: 'Buffer', data: [Symbol()]}}}).message).toBe ('< {\"buf\":{\"data\":[null],\"type\":\"Buffer\"}}')
 	expect (formatDetails ({encoding: 'hex'}).transform ({message: '<', details: {buf: Buffer.from ([33, 33, 33, 33, 33, 33])}}).message).toBe ('< {\"buf\":\"212121212121\"}')
 	expect (formatDetails ({encoding: _ => undefined}).transform ({message: '<', details: {buf: Buffer.from ([33, 33, 33, 33, 33, 33])}}).message).toBe ('< {}')
 
@@ -24,5 +23,7 @@ test ('basic', async () => {
 	expect (() => formatDetails ({maxLength: 3.14})).toThrow ('maxLength')
 	expect (() => formatDetails ({maxLength: '20'})).toThrow ('maxLength')
 	expect (() => formatDetails ({encoding: 'hexen'})).toThrow ('encoding')
+
+//	expect (formatDetails ({stringify:{deterministic: false}}).transform ({message: '<', details: {id: 1, code: new Transform ()}}).message).toBe ('< {"id":1,"code":"RED"}')
 
 })

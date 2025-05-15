@@ -24,6 +24,6 @@ test ('basic', async () => {
 	expect (() => formatDetails ({maxLength: '20'})).toThrow ('maxLength')
 	expect (() => formatDetails ({encoding: 'hexen'})).toThrow ('encoding')
 
-//	expect (formatDetails ({stringify:{deterministic: false}}).transform ({message: '<', details: {id: 1, code: new Transform ()}}).message).toBe ('< {"id":1,"code":"RED"}')
+	expect (formatDetails ({stringify:{deterministic: false}}).transform ({message: '<', details: {id: 1, code: new Transform ()}}).message).toBe ('< {"id":1}')
 
 })

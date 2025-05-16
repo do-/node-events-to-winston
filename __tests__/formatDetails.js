@@ -26,4 +26,10 @@ test ('basic', async () => {
 
 	expect (formatDetails ({stringify:{deterministic: false}}).transform ({message: '<', details: {id: 1, code: new Transform ()}}).message).toBe ('< {"id":1}')
 
+	{
+		const f = formatDetails (), info = {message: '<', details: 42}
+		expect (f.transform (info).message).toBe ('< 42')
+		expect (f.transform (info).message).toBe ('< 42')
+	}
+
 })

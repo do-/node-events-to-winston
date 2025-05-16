@@ -13,4 +13,10 @@ test ('basic', async () => {
 	expect (formatPhase ().transform ({level: 'info', message: 'A', isLast: true}).message).toBe ('< A')
 	expect (formatPhase ().transform ({level: 'info', message: 'A', isFirst: true, isLast: true}).message).toBe ('* A')
 
+	{
+		const f = formatPhase (), info = {level: 'info', message: 'A'}
+		expect (f.transform (info).message).toBe ('- A')
+		expect (f.transform (info).message).toBe ('- A')
+	}
+
 })
